@@ -169,8 +169,8 @@ public class IndiRegFirstForm {
   	}
   	else if (KW.equalsIgnoreCase("enter_details"))
   	{
-  		enter_details(ip1, ip2, ip3, ip4, ip5, ip6, ip7, ip8, ip9);
-  		return null;
+  		String res = enter_details(ip1, ip2, ip3, ip4, ip5, ip6, ip7, ip8, ip9,vExpected);
+  		return res;
   	}
   	else if (KW.equalsIgnoreCase("CloseBrowser"))
   	{
@@ -205,9 +205,10 @@ public class IndiRegFirstForm {
   {
 	  FirstFormPOM.individualreg(driver).click(); 
   }
-  public void enter_details(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String ip7,String ip8,String ip9) throws InterruptedException
+  public String enter_details(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String ip7,String ip8,String ip9,String expected) throws InterruptedException
   {
-	  
+	  if(!ip1.isEmpty() && !ip2.isEmpty() && !ip3.isEmpty() && !ip4.isEmpty() && !ip5.isEmpty() && !ip6.isEmpty() && !ip7.isEmpty())
+	  {
 	  //enter username
 	  FirstFormPOM.Firstname(driver).sendKeys(ip1);
 	  //enter lastname
@@ -232,13 +233,22 @@ public class IndiRegFirstForm {
 	  FirstFormPOM.mobileno(driver).sendKeys(ip7);
 	  //select i agree text box
 	  Thread.sleep(1000);
-	  WebElement checkbox = FirstFormPOM.Iagreecheckbox(driver);
+	  WebElement checkbox = FirstFormPOM.Iagreecheckbox(driver).get(8);
 	  if(!checkbox.isSelected())
 	  {
 		  System.out.println("check box not selected");
+		  Actions act = new Actions(driver);
+		  act.moveToElement(checkbox).build().perform();
 		  checkbox.click();
 	  }
 	  Thread.sleep(2000);
+	  return null;
+	 }
+	  
+	  else 
+	  {
+		  return null;
+	  }
   }
   public void closebrowser()
  	{

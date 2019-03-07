@@ -86,7 +86,7 @@ public class FirstFormPOM {
 		return element;
 	}
 	
-	public static WebElement Iagreecheckbox(WebDriver driver)
+	public static List<WebElement> Iagreecheckbox(WebDriver driver)
 	{
 		//element = driver.findElement(By.xpath("//div[@class='form-check m-b-0']"));
 		
@@ -101,14 +101,13 @@ public class FirstFormPOM {
 		
 		//other element obscures it
 		//element = driver.findElement(By.xpath("//input[@class='custom-control-input ng-dirty ng-touched ng-invalid']"));
-		
-		//element = driver.findElement(By.xpath("//label[@class='col-xs-12 col-md-10 push-md-1 custom-control custom-checkbox m-b-0 user-select']"));
+		elements = driver.findElements(By.xpath("//span[@class='required-text']"));
 		//element = driver.findElement(By.xpath("//label[@class='col-xs-12 col-md-10 push-md-1 custom-control custom-checkbox m-b-0 user-select']//input[@name='acceptTerms']"));
-		driver.findElement(By.xpath("//input[@type='checkbox']"));
+		//element = driver.findElement(By.xpath("//input[@type='checkbox']"));
 		//driver.findElement(By.xpath("//span[contains(text(),'I Accept the ')]"));
 		//driver.findElement(By.xpath("//label[@class='col-xs-12 col-md-10 push-md-1 custom-control custom-checkbox m-b-0 user-select']/input[@type='checkbox']"));
 		//driver.findElement(By.xpath("//input[@name='acceptTerms']"));
-		return element;
+		return elements;
 	}
 	
 	public static WebElement registerbtn(WebDriver driver)
