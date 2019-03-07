@@ -20,6 +20,8 @@ import readwriteexcel.ReadExcel;
 import readwriteexcel.WriteExcel;
 
 public class IndiRegFirstForm {
+	//https://github.com/ashudip/Registration.git--------------> repository name
+	
 	WebDriver driver;
     String xl_path,xl_tcRes,xl_TsRes;
     int xRows_TC, xRows_TS, xCols_TC, xCols_TS,randno;
