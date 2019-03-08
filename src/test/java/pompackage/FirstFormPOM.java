@@ -88,25 +88,8 @@ public class FirstFormPOM {
 	
 	public static List<WebElement> Iagreecheckbox(WebDriver driver)
 	{
-		//element = driver.findElement(By.xpath("//div[@class='form-check m-b-0']"));
 		
-		//clicks on terms and condition
-		//element = driver.findElement(By.xpath("//span[@class='custom-control-description text-uppercase form-label']"));
-		
-		//absoulute xpath
-		//element = driver.findElement(By.xpath("/html/body/accounts-root/core-root/accounts-individual-registration/div[2]/div/div[2]/form/div[9]/div/label/span[1]"));
-		
-		//element = driver.findElement(By.xpath("/html/body/accounts-root/core-root/accounts-individual-registration/div[2]/div/div[2]/form/div[9]/div/label/span[2]/text()[1]"));
-		
-		
-		//other element obscures it
-		//element = driver.findElement(By.xpath("//input[@class='custom-control-input ng-dirty ng-touched ng-invalid']"));
 		elements = driver.findElements(By.xpath("//span[@class='required-text']"));
-		//element = driver.findElement(By.xpath("//label[@class='col-xs-12 col-md-10 push-md-1 custom-control custom-checkbox m-b-0 user-select']//input[@name='acceptTerms']"));
-		//element = driver.findElement(By.xpath("//input[@type='checkbox']"));
-		//driver.findElement(By.xpath("//span[contains(text(),'I Accept the ')]"));
-		//driver.findElement(By.xpath("//label[@class='col-xs-12 col-md-10 push-md-1 custom-control custom-checkbox m-b-0 user-select']/input[@type='checkbox']"));
-		//driver.findElement(By.xpath("//input[@name='acceptTerms']"));
 		return elements;
 	}
 	
@@ -115,5 +98,25 @@ public class FirstFormPOM {
 		element = driver.findElement(By.xpath("//button[@class='btn btn-success w-100 text-uppercase']"));
 		return element;
 	}
+	//first name requuired msg
+	public static WebElement usernamereq(WebDriver driver) {
+		element = driver.findElement(By.xpath("//div[contains(text(),' Valid first name is required. ')]"));
+		return element;
+	}
+	//lastname required msg
+	public static WebElement lastnamereq(WebDriver driver)
+	{
+		element = driver.findElement(By.xpath("//div[contains(text(),' Valid last name is required. ')]"));
+		return element;
+	}
+	//email required msg
+	public static List<WebElement> emailreq(WebDriver driver)
+	{
+		elements = driver.findElements(By.xpath("//div[contains(text(),' Valid email is required. ')]"));
+		return elements;
+	}
+	
+	
+	
 	
 }
