@@ -115,8 +115,20 @@ public class FirstFormPOM {
 		elements = driver.findElements(By.xpath("//div[contains(text(),' Valid email is required. ')]"));
 		return elements;
 	}
-	
-	
+	public static WebElement validpasswordreq(WebDriver driver) {
+		element = driver.findElement(By.xpath("//div[contains(text(),' Valid password is required. ')]"));
+		return element;		
+	}
+	public static WebElement passwordreq(WebDriver driver)
+	{
+		element = driver.findElement(By.xpath("//div[contains(text(),' Password is required. ')]"));
+		return element;
+	}
+	public static WebElement validphonereq(WebDriver driver)
+	{
+		element = driver.findElement(By.xpath("//div[contains(text(),' Valid mobile no. is required. ')]"));
+		return element;
+	}
 	
 	
 }

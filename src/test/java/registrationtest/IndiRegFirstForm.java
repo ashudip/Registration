@@ -1,9 +1,13 @@
 package registrationtest;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -50,7 +54,7 @@ public class IndiRegFirstForm {
        System.out.println("TS Cols are " + xCols_TS);
     }
   @Test
-  public void f() {
+  public void f() throws IOException {
 	  for (int i = 1; i <xRows_TC; i++) {
 
           if(xlTC[i][2].equals("Y"))
@@ -107,7 +111,7 @@ public class IndiRegFirstForm {
                               vTS_Res = "verfication failed";
                               vTC_Res = "fail";
                              xlTS[j][16] = "look at the screenshot";
-                           //  takeScreenshot("/home/codemaxpc-01/Desktop/BTA/FailScreenshot/fail"+xlTC[i][0]+"_"+j+".png");
+                            takeScreenshot("/home/codemaxpc-01/Desktop/BTA/FailScreenshot/fail"+xlTC[i][0]+"_"+j+".png");
                                   
                           }
                       } catch (Exception e) {
@@ -116,7 +120,7 @@ public class IndiRegFirstForm {
                           vTC_Res = "fail";
                           vTS_Res = "fail";
                           xlTS[j][16] = "look at screenshot";
-                         // takeScreenshot("/home/codemaxpc-01/Desktop/BTA/FailScreenshot/fail"+xlTC[i][0]+"_"+j+".png");
+                          takeScreenshot("/home/codemaxpc-01/Desktop/BTA/FailScreenshot/fail"+xlTC[i][0]+"_"+j+".png");
                        }
                       //actual result
                       xlTS[j][14] = res;
@@ -170,7 +174,7 @@ public class IndiRegFirstForm {
   	}
   	else if (KW.equalsIgnoreCase("enter_details"))
   	{
-  		String res = enter_details(ip1, ip2, ip3, ip4, ip5, ip6, ip7, ip8, ip9,vExpected);
+  		String res = Enter_blankDetails(ip1, ip2, ip3, ip4, ip5, ip6, ip7, ip8, ip9,vExpected);
   		return res;
   	}
   	else if (KW.equalsIgnoreCase("CloseBrowser"))
@@ -184,7 +188,15 @@ public class IndiRegFirstForm {
   	}
 	  
   }
-  //click on register link on login page
+  /*******************************************************Take screenshot of failed test step*************************************************/
+  
+  public void takeScreenshot(String path) throws IOException
+  {
+ 	 File src= ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+ 		 FileUtils.copyFile(src, new File(path));
+  }
+  
+  /******************************************click on register link on login page*********************************************************/
   public void launchbrowser()
 	{
 		System.setProperty("webdriver.gecko.driver","/home/codemaxpc-01/Desktop/BTA/geckodriver");	   
@@ -207,7 +219,7 @@ public class IndiRegFirstForm {
 	  FirstFormPOM.individualreg(driver).click(); 
   }
   @SuppressWarnings("unused")
-public String enter_details(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String ip7,String ip8,String ip9,String expected) throws InterruptedException
+public String Enter_blankDetails(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String ip7,String ip8,String ip9,String expected) throws InterruptedException
   {
 	  //System.out.println("value of ip1="+ip1);
 	  if(!ip1.contains(" ") & !ip2.contains(" ") & !ip3.contains(" ") & !ip4.contains(" ") & !ip5.contains(" ") & !ip6.contains(" ") & !ip7.contains(" "))
@@ -233,6 +245,16 @@ public String enter_details(String ip1,String ip2,String ip3,String ip4,String i
 	  else if(ip4.contains(" "))
 	  {
 		  String res = blankconfirmemail(ip1,ip2,ip3,ip4,expected);
+		  return res;
+	  }
+	  else if(ip5.contains(" "))
+	  {
+		  String res = blankpassword(ip1,ip2,ip3,ip4,ip5,expected);
+		  return res;
+	  }
+	  else if(ip7.contains(" "))
+	  {
+		  String res = blankphoneno(ip1,ip2,ip3,ip4,ip5,ip6,ip7,expected);
 		  return res;
 	  }
 	  else 
@@ -347,8 +369,9 @@ public String enter_details(String ip1,String ip2,String ip3,String ip4,String i
 	  return validationmsg;
 	 
   }
- /***********************************************************************blank confirm email*****************************************************/
- public String blankconfirmemail(String ip1,String ip2,String ip3,String ip4,String expected)
+ /***********************************************************************blank confirm email function*****************************************************/
+
+  public String blankconfirmemail(String ip1,String ip2,String ip3,String ip4,String expected)
  {
 	 String validationmsg;
 	 FirstFormPOM.Firstname(driver).sendKeys(ip1);
@@ -369,6 +392,113 @@ public String enter_details(String ip1,String ip2,String ip3,String ip4,String i
 	}
 	  return validationmsg;	 
  }
+  
+/**************************************************************************blank password function*********************************************************/
+  
+  public String blankpassword(String ip1,String ip2,String ip3,String ip4,String ip5,String expected)
+  {
+	  String validationmsg;
+	  	//enter username
+	     FirstFormPOM.Firstname(driver).sendKeys(ip1);
+		 //enter lastname
+	     FirstFormPOM.Lastname(driver).sendKeys(ip2);
+	     //enter email
+		 FirstFormPOM.email(driver).sendKeys(ip3);
+		 //enter confirmemail
+		 FirstFormPOM.confirmemail(driver).sendKeys(ip4);
+		 //enter password
+		 FirstFormPOM.password(driver).sendKeys(ip5);
+		 
+		 WebDriverWait wait = new WebDriverWait(driver,20);
+		 wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.validpasswordreq(driver)));
+		 validationmsg = FirstFormPOM.validpasswordreq(driver).getText();
+	  if(validationmsg.equalsIgnoreCase(expected))
+	  {
+		  vTC_Res = "pass";
+		  vTS_Res = "pass";
+	  }
+	  else {
+		vTC_Res = "fail";
+		vTS_Res = "fail";
+	}
+	  return validationmsg;	   
+  }
+ /***************************************************************clear password function**********************************************************/
+  
+  public String clearpassword(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String expected)
+ {
+	 String validationmsg;
+	  	//enter username
+	     FirstFormPOM.Firstname(driver).sendKeys(ip1);
+		 //enter lastname
+	     FirstFormPOM.Lastname(driver).sendKeys(ip2);
+	     //enter email
+		 FirstFormPOM.email(driver).sendKeys(ip3);
+		 //enter confirmemail
+		 FirstFormPOM.confirmemail(driver).sendKeys(ip4);
+		 //enter password
+		 FirstFormPOM.password(driver).sendKeys(ip5);
+		 //clear password
+		 FirstFormPOM.password(driver).clear();
+		 WebDriverWait wait = new WebDriverWait(driver,20);
+		 wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.passwordreq(driver)));
+		 validationmsg = FirstFormPOM.passwordreq(driver).getText();
+		 System.out.println("clear password validation message = "+validationmsg);
+		 FirstFormPOM.confirmpassword(driver).sendKeys(ip6);
+	  if(validationmsg.equalsIgnoreCase(expected))
+	  {
+		  vTC_Res = "pass";
+		  vTS_Res = "pass";
+	  }
+	  else {
+		vTC_Res = "fail";
+		vTS_Res = "fail";
+	}
+	  return validationmsg;	   
+ }
+/*******************************************************************Blank phone no. function @throws InterruptedException *********************************************************/
+
+  public String blankphoneno(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String ip7,String expected ) throws InterruptedException {
+
+	String validationmsg;
+  	//enter username
+     FirstFormPOM.Firstname(driver).sendKeys(ip1);
+	 //enter lastname
+     FirstFormPOM.Lastname(driver).sendKeys(ip2);
+     //enter email
+	 FirstFormPOM.email(driver).sendKeys(ip3);
+	 //enter confirmemail
+	 FirstFormPOM.confirmemail(driver).sendKeys(ip4);
+	 //enter password
+	 FirstFormPOM.password(driver).sendKeys(ip5);
+	 //enter confirm password
+	 FirstFormPOM.confirmpassword(driver).sendKeys(ip6);
+	 //select india code
+	  FirstFormPOM.clickdialcode(driver).click();
+	 //send +91 
+	 FirstFormPOM.dialcodetextbox(driver).sendKeys("+91");
+	  Thread.sleep(1000);
+	  //select highlighted text
+	  //WebDriverWait wait  = new WebDriverWait(driver,10);
+	  //wait.until(ExpectedConditions.elementToBeClickable(FirstFormPOM.selectHighlightedtext(driver)));
+	  FirstFormPOM.selectHighlightedtext(driver).click();
+	  //enter blank phone no
+	  FirstFormPOM.mobileno(driver).sendKeys(ip7);
+	  WebDriverWait wait = new WebDriverWait(driver,20);
+	  wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.validphonereq(driver)));
+	  validationmsg = FirstFormPOM.validphonereq(driver).getText();
+	  if(validationmsg.equalsIgnoreCase(expected))
+	  {
+		  vTC_Res = "pass";
+		  vTS_Res = "pass";
+	  }
+	  else {
+		vTC_Res = "fail";
+		vTS_Res = "fail";
+	}
+	  return validationmsg;	   
+
+}  
   
   public void closebrowser()
  	{
