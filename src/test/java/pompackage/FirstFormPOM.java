@@ -1,7 +1,6 @@
 package pompackage;
 
-import java.awt.Checkbox;
-import java.util.ArrayList;
+
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -12,6 +11,16 @@ public class FirstFormPOM {
 	private static List<WebElement> elements = null;
 	
 	private static WebElement element = null;
+	
+	//enter url
+	public static String enterurl()
+	{
+		String url = "https://rest.bldmn24.com/accounts/";
+		return url;
+	}
+	
+	
+	
 	//register link on login page
 	public static WebElement registerlink(WebDriver driver)
 	{
@@ -92,7 +101,7 @@ public class FirstFormPOM {
 		elements = driver.findElements(By.xpath("//span[@class='required-text']"));
 		return elements;
 	}
-	
+	//register button of first form on individual page
 	public static WebElement registerbtn(WebDriver driver)
 	{
 		element = driver.findElement(By.xpath("//button[@class='btn btn-success w-100 text-uppercase']"));
@@ -115,10 +124,12 @@ public class FirstFormPOM {
 		elements = driver.findElements(By.xpath("//div[contains(text(),' Valid email is required. ')]"));
 		return elements;
 	}
+	//password required message
 	public static WebElement validpasswordreq(WebDriver driver) {
 		element = driver.findElement(By.xpath("//div[contains(text(),' Valid password is required. ')]"));
 		return element;		
 	}
+	
 	public static WebElement passwordreq(WebDriver driver)
 	{
 		element = driver.findElement(By.xpath("//div[contains(text(),' Password is required. ')]"));
@@ -130,5 +141,17 @@ public class FirstFormPOM {
 		return element;
 	}
 	
+	//validation if email and confirm email are not same
+	public static WebElement confirmpassworddoesntmatch(WebDriver driver){
+		element = driver.findElement(By.xpath("//div[contains(text(),' Confirm email must be same as email. ')]"));
+		return element;	
+	}
+	
+	//validation message if password and confirm password dont match
+	public static WebElement passconfirmpassdontmatch(WebDriver driver)
+	{
+		element = driver.findElement(By.xpath("//div[contains(text(),' Confirm password must be same as password. ')]"));
+		return element;
+	}
 	
 }

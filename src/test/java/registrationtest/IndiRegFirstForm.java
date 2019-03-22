@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -18,9 +17,8 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.graphbuilder.curve.Point;
-
 import pompackage.FirstFormPOM;
+import pompackage.ThankYou;
 import readwriteexcel.ReadExcel;
 import readwriteexcel.WriteExcel;
 
@@ -150,16 +148,14 @@ public class IndiRegFirstForm {
   
   public String execute(String KW,String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String ip7,String ip8,String ip9,String expected) throws InterruptedException
   {
-	 
-      
-	  if(KW.equalsIgnoreCase("LaunchBrowser"))
+	 if(KW.equalsIgnoreCase("LaunchBrowser"))
       {
          launchbrowser();
           return null;
       }
   	else if(KW.equalsIgnoreCase("enter_url"))
   	{
-  		enter_url(ip1);
+  		enter_url();
   		return null;
   	}
   	else if(KW.equalsIgnoreCase("click_Register_link"))
@@ -172,11 +168,29 @@ public class IndiRegFirstForm {
   		Click_indiReg_link();
   		return null;
   	}
-  	else if (KW.equalsIgnoreCase("enter_details"))
+  	else if (KW.equalsIgnoreCase("Enter_Details"))
   	{
   		String res = Enter_blankDetails(ip1, ip2, ip3, ip4, ip5, ip6, ip7, ip8, ip9,vExpected);
   		return res;
   	}
+	else if(KW.equalsIgnoreCase("Click_registerbtn")) {
+		Click_registerbtn();
+		return null;
+	}
+	else if(KW.equalsIgnoreCase("confirm_email_password"))
+	{
+		 String res = confirm_email_password_match(ip1, ip2, ip3, ip4, ip5, ip6,ip7,vExpected);
+		 return res;
+	}
+  	else if(KW.equalsIgnoreCase("Thankyoumsg"))
+  	{
+  		String res = thankyou(expected);
+  		return res;
+  	}
+	else if(KW.equalsIgnoreCase("TextAfterThankYou")) {
+		String res = TextAfterThankYou(expected);
+		return res;
+	}
   	else if (KW.equalsIgnoreCase("CloseBrowser"))
   	{
   		closebrowser();
@@ -204,9 +218,9 @@ public class IndiRegFirstForm {
 	    driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
 	    driver.manage().window().maximize();
 	}
-	public  void enter_url(String ip1)
+	public  void enter_url()
 	{
-		driver.navigate().to(ip1);
+		driver.navigate().to(FirstFormPOM.enterurl());
 	}
   public void click_register_link()
   {
@@ -218,6 +232,8 @@ public class IndiRegFirstForm {
   {
 	  FirstFormPOM.individualreg(driver).click(); 
   }
+  
+  
   @SuppressWarnings("unused")
 public String Enter_blankDetails(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String ip7,String ip8,String ip9,String expected) throws InterruptedException
   {
@@ -227,35 +243,161 @@ public String Enter_blankDetails(String ip1,String ip2,String ip3,String ip4,Str
 		  detailspresent(ip1,ip2,ip3,ip4,ip5,ip6,ip7);
 	      return null;
 	  }
+/****************************************************************first name is blank************************************************************/
 	  else if(ip1.contains(" "))
 	  {
-		  String res = blankfirstname(ip1,expected);
-		  return res;
-	  }
+		  //keep firstname as blank first name
+			  FirstFormPOM.Firstname(driver).sendKeys(ip1);
+			  WebDriverWait wait = new WebDriverWait(driver,20);
+			  wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.usernamereq(driver)));
+			  String namereq = FirstFormPOM.usernamereq(driver).getText();  
+			  System.out.println("name empty validation="+namereq);
+			  if(namereq.equalsIgnoreCase(expected))
+			  {
+				  vTS_Res = "pass";
+				  vTC_Res = "pass";
+			  }
+			  else {
+				  vTS_Res = "fail";
+				  vTC_Res = "fail";
+			  }
+			  return namereq;
+		} 
+	  
+/*****************************************************************Last name is blank************************************************************/	  
 	  else if(ip2.contains(" "))
 	  {
-		  String res = blanklastname(ip1,ip2,expected);
-		  return res;
+		  String validationmsg;
+		  FirstFormPOM.Firstname(driver).sendKeys(ip1);
+		  FirstFormPOM.Lastname(driver).sendKeys(ip2);
+		  WebDriverWait wait = new WebDriverWait(driver,20);
+		  wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.lastnamereq(driver)));
+		  validationmsg = FirstFormPOM.lastnamereq(driver).getText();
+		  if(validationmsg.equalsIgnoreCase(expected))
+		  {
+			  vTC_Res = "pass";
+			  vTS_Res = "pass";
+		  }
+		  else {
+			vTC_Res = "fail";
+			vTS_Res = "fail";
+		}
+		  return validationmsg;
 	  }
+/*****************************************************************email is blank*******************************************************/	  
 	  else if(ip3.contains(" "))
 	  {
-		  String res = Blankemailid(ip1,ip2,ip3,expected);
-		  return res;
+		  String validationmsg;
+			 FirstFormPOM.Firstname(driver).sendKeys(ip1);
+			 FirstFormPOM.Lastname(driver).sendKeys(ip2);
+			 FirstFormPOM.email(driver).sendKeys(ip3);
+			 WebDriverWait wait = new WebDriverWait(driver,20);
+			 wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.emailreq(driver).get(0)));
+			 validationmsg = FirstFormPOM.emailreq(driver).get(0).getText();
+			 if(validationmsg.equalsIgnoreCase(expected))
+			  {
+				  vTC_Res = "pass";
+				  vTS_Res = "pass";
+			  }
+			  else {
+				vTC_Res = "fail";
+				vTS_Res = "fail";
+			}
+			  return validationmsg;
 	  }
-	  else if(ip4.contains(" "))
-	  {
-		  String res = blankconfirmemail(ip1,ip2,ip3,ip4,expected);
-		  return res;
+	  /***********************************************************************blank confirm email function*****************************************************/
+		else if(ip4.contains(" "))
+		{
+			 String validationmsg;
+			 FirstFormPOM.Firstname(driver).sendKeys(ip1);
+			 FirstFormPOM.Lastname(driver).sendKeys(ip2);
+			 FirstFormPOM.email(driver).sendKeys(ip3);
+			 FirstFormPOM.confirmemail(driver).sendKeys(ip4);
+			 WebDriverWait wait = new WebDriverWait(driver,20);
+			 wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.emailreq(driver).get(1)));
+			 validationmsg = FirstFormPOM.emailreq(driver).get(1).getText();
+			 if(validationmsg.equalsIgnoreCase(expected))
+			  {
+				  vTC_Res = "pass";
+				  vTS_Res = "pass";
+			  }
+			  else {
+				vTC_Res = "fail";
+				vTS_Res = "fail";
+			}
+			  return validationmsg;	 
 	  }
-	  else if(ip5.contains(" "))
+	  
+/**************************************************************************blank password function*********************************************************/
+	   else if(ip5.contains(" "))
 	  {
-		  String res = blankpassword(ip1,ip2,ip3,ip4,ip5,expected);
-		  return res;
+		  String validationmsg;
+		  	//enter username
+		     FirstFormPOM.Firstname(driver).sendKeys(ip1);
+			 //enter lastname
+		     FirstFormPOM.Lastname(driver).sendKeys(ip2);
+		     //enter email
+			 FirstFormPOM.email(driver).sendKeys(ip3);
+			 //enter confirmemail
+			 FirstFormPOM.confirmemail(driver).sendKeys(ip4);
+			 //enter password
+			 FirstFormPOM.password(driver).sendKeys(ip5);
+			 
+			 WebDriverWait wait = new WebDriverWait(driver,20);
+			 wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.validpasswordreq(driver)));
+			 validationmsg = FirstFormPOM.validpasswordreq(driver).getText();
+		  if(validationmsg.equalsIgnoreCase(expected))
+		  {
+			  vTC_Res = "pass";
+			  vTS_Res = "pass";
+		  }
+		  else {
+			vTC_Res = "fail";
+			vTS_Res = "fail";
+		}
+		  return validationmsg;	   
 	  }
-	  else if(ip7.contains(" "))
+ /*******************************************************************Blank phone no. function @throws InterruptedException *********************************************************/
+	   else if(ip7.contains(" "))
 	  {
-		  String res = blankphoneno(ip1,ip2,ip3,ip4,ip5,ip6,ip7,expected);
-		  return res;
+		  String validationmsg;
+		  	//enter username
+		     FirstFormPOM.Firstname(driver).sendKeys(ip1);
+			 //enter lastname
+		     FirstFormPOM.Lastname(driver).sendKeys(ip2);
+		     //enter email
+			 FirstFormPOM.email(driver).sendKeys(ip3);
+			 //enter confirmemail
+			 FirstFormPOM.confirmemail(driver).sendKeys(ip4);
+			 //enter password
+			 FirstFormPOM.password(driver).sendKeys(ip5);
+			 //enter confirm password
+			 FirstFormPOM.confirmpassword(driver).sendKeys(ip6);
+			 //select india code
+			  FirstFormPOM.clickdialcode(driver).click();
+			 //send +91 
+			 FirstFormPOM.dialcodetextbox(driver).sendKeys("+91");
+			  Thread.sleep(1000);
+			  //select highlighted text
+			  //WebDriverWait wait  = new WebDriverWait(driver,10);
+			  //wait.until(ExpectedConditions.elementToBeClickable(FirstFormPOM.selectHighlightedtext(driver)));
+			  FirstFormPOM.selectHighlightedtext(driver).click();
+			  //enter blank phone no
+			  FirstFormPOM.mobileno(driver).sendKeys(ip7);
+			  WebDriverWait wait = new WebDriverWait(driver,20);
+			  wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.validphonereq(driver)));
+			  validationmsg = FirstFormPOM.validphonereq(driver).getText();
+			  if(validationmsg.equalsIgnoreCase(expected))
+			  {
+				  vTC_Res = "pass";
+				  vTS_Res = "pass";
+			  }
+			  else {
+				vTC_Res = "fail";
+				vTS_Res = "fail";
+			}
+			  return validationmsg;	   
+
 	  }
 	  else 
 	  {
@@ -263,11 +405,48 @@ public String Enter_blankDetails(String ip1,String ip2,String ip3,String ip4,Str
 	  }
   }
   
-  /*************************************************************** enter valid details function ********************************************************/
   
-  public void detailspresent(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String ip7) throws InterruptedException
+  /*****************************************************************Thank you message after successfull registration************************************************************/
+   public String thankyou(String expected)
   {
-	  //enter username
+	  String validationmsg;
+	  
+	  validationmsg = ThankYou.thankyoumsg(driver).getText();
+	  if(validationmsg.equalsIgnoreCase(expected))
+	  {
+		  vTC_Res = "pass";
+		  vTS_Res = "pass";
+	  }
+	  else
+	  {
+		  vTC_Res = "fail";
+		  vTS_Res = "fail";
+	  }
+	  return validationmsg;
+  }
+
+  /*******************************************************************message after thank you****************************************************/
+    public String TextAfterThankYou(String expected)
+  {
+	  String validationmsg;
+	  validationmsg = ThankYou.message(driver).getText();
+	  if(validationmsg.equalsIgnoreCase(validationmsg))
+	  {
+		  vTS_Res = "pass";
+		  vTC_Res = "pass";
+	  }
+	  else
+	  {
+		  vTC_Res = "fail";
+		  vTS_Res = "fail";		  
+	  }
+	  return validationmsg;
+  }
+  
+  /*************************************************************** enter valid details function ********************************************************/
+    public void detailspresent(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String ip7) throws InterruptedException
+  {
+      //enter username
 	  FirstFormPOM.Firstname(driver).sendKeys(ip1);
 	  //enter lastname
 	  FirstFormPOM.Lastname(driver).sendKeys(ip2);
@@ -299,131 +478,21 @@ public String Enter_blankDetails(String ip1,String ip2,String ip3,String ip4,Str
 		  act.moveToElement(checkbox).build().perform();
 		  checkbox.click();
 	  }
-	  Thread.sleep(2000);
-  }
+	  FirstFormPOM.registerbtn(driver).click();
+	   Thread.sleep(2000);
+     
+   }
+  /*************************************************************click on register button for individual registration on form*****************************************************/
   
-  /************************************************************blank first name function ***************************************************/
-  
-  public String blankfirstname(String ip1,String expected) {
-	//keep firstname as blank first name
-	  FirstFormPOM.Firstname(driver).sendKeys(ip1);
-	  WebDriverWait wait = new WebDriverWait(driver,20);
-	  wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.usernamereq(driver)));
-	  String namereq = FirstFormPOM.usernamereq(driver).getText();
-	  
-	  System.out.println("name empty validation="+namereq);
-	  if(namereq.equalsIgnoreCase(expected))
-	  {
-		  vTS_Res = "pass";
-		  vTC_Res = "pass";
-	  }
-	  else {
-		  vTS_Res = "fail";
-		  vTC_Res = "fail";
-	  }
-	  return namereq;
-  	}
-  
-  /****************************************************************Blank Last name function**********************************************************/
-
-  public String blanklastname(String ip1,String ip2 ,String expected) {
-	 String validationmsg;
-	  FirstFormPOM.Firstname(driver).sendKeys(ip1);
-	  FirstFormPOM.Lastname(driver).sendKeys(ip2);
-	  WebDriverWait wait = new WebDriverWait(driver,20);
-	  wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.lastnamereq(driver)));
-	  validationmsg = FirstFormPOM.lastnamereq(driver).getText();
-	  if(validationmsg.equalsIgnoreCase(expected))
-	  {
-		  vTC_Res = "pass";
-		  vTS_Res = "pass";
-	  }
-	  else {
-		vTC_Res = "fail";
-		vTS_Res = "fail";
-	}
-	  return validationmsg;
-	  
-	}
-  
-  /***************************************************************blank email function**********************************************************/
-  
-  public String Blankemailid(String ip1 , String ip2 ,String ip3,String expected)
+    
+    public void Click_registerbtn()
   {
-	 String validationmsg;
-	 FirstFormPOM.Firstname(driver).sendKeys(ip1);
-	 FirstFormPOM.Lastname(driver).sendKeys(ip2);
-	 FirstFormPOM.email(driver).sendKeys(ip3);
-	 WebDriverWait wait = new WebDriverWait(driver,20);
-	 wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.emailreq(driver).get(0)));
-	 validationmsg = FirstFormPOM.emailreq(driver).get(0).getText();
-	 if(validationmsg.equalsIgnoreCase(expected))
-	  {
-		  vTC_Res = "pass";
-		  vTS_Res = "pass";
-	  }
-	  else {
-		vTC_Res = "fail";
-		vTS_Res = "fail";
-	}
-	  return validationmsg;
-	 
+	  FirstFormPOM.registerbtn(driver).click();
   }
- /***********************************************************************blank confirm email function*****************************************************/
-
-  public String blankconfirmemail(String ip1,String ip2,String ip3,String ip4,String expected)
- {
-	 String validationmsg;
-	 FirstFormPOM.Firstname(driver).sendKeys(ip1);
-	 FirstFormPOM.Lastname(driver).sendKeys(ip2);
-	 FirstFormPOM.email(driver).sendKeys(ip3);
-	 FirstFormPOM.confirmemail(driver).sendKeys(ip4);
-	 WebDriverWait wait = new WebDriverWait(driver,20);
-	 wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.emailreq(driver).get(1)));
-	 validationmsg = FirstFormPOM.emailreq(driver).get(1).getText();
-	 if(validationmsg.equalsIgnoreCase(expected))
-	  {
-		  vTC_Res = "pass";
-		  vTS_Res = "pass";
-	  }
-	  else {
-		vTC_Res = "fail";
-		vTS_Res = "fail";
-	}
-	  return validationmsg;	 
- }
   
-/**************************************************************************blank password function*********************************************************/
+/***************************************************************clear password function**********************************************************/
   
-  public String blankpassword(String ip1,String ip2,String ip3,String ip4,String ip5,String expected)
-  {
-	  String validationmsg;
-	  	//enter username
-	     FirstFormPOM.Firstname(driver).sendKeys(ip1);
-		 //enter lastname
-	     FirstFormPOM.Lastname(driver).sendKeys(ip2);
-	     //enter email
-		 FirstFormPOM.email(driver).sendKeys(ip3);
-		 //enter confirmemail
-		 FirstFormPOM.confirmemail(driver).sendKeys(ip4);
-		 //enter password
-		 FirstFormPOM.password(driver).sendKeys(ip5);
-		 
-		 WebDriverWait wait = new WebDriverWait(driver,20);
-		 wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.validpasswordreq(driver)));
-		 validationmsg = FirstFormPOM.validpasswordreq(driver).getText();
-	  if(validationmsg.equalsIgnoreCase(expected))
-	  {
-		  vTC_Res = "pass";
-		  vTS_Res = "pass";
-	  }
-	  else {
-		vTC_Res = "fail";
-		vTS_Res = "fail";
-	}
-	  return validationmsg;	   
-  }
- /***************************************************************clear password function**********************************************************/
+  
   
   public String clearpassword(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String expected)
  {
@@ -456,49 +525,120 @@ public String Enter_blankDetails(String ip1,String ip2,String ip3,String ip4,Str
 	}
 	  return validationmsg;	   
  }
-/*******************************************************************Blank phone no. function @throws InterruptedException *********************************************************/
 
-  public String blankphoneno(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String ip7,String expected ) throws InterruptedException {
-
-	String validationmsg;
-  	//enter username
-     FirstFormPOM.Firstname(driver).sendKeys(ip1);
-	 //enter lastname
-     FirstFormPOM.Lastname(driver).sendKeys(ip2);
-     //enter email
-	 FirstFormPOM.email(driver).sendKeys(ip3);
-	 //enter confirmemail
-	 FirstFormPOM.confirmemail(driver).sendKeys(ip4);
-	 //enter password
-	 FirstFormPOM.password(driver).sendKeys(ip5);
-	 //enter confirm password
-	 FirstFormPOM.confirmpassword(driver).sendKeys(ip6);
-	 //select india code
-	  FirstFormPOM.clickdialcode(driver).click();
-	 //send +91 
-	 FirstFormPOM.dialcodetextbox(driver).sendKeys("+91");
-	  Thread.sleep(1000);
-	  //select highlighted text
-	  //WebDriverWait wait  = new WebDriverWait(driver,10);
-	  //wait.until(ExpectedConditions.elementToBeClickable(FirstFormPOM.selectHighlightedtext(driver)));
-	  FirstFormPOM.selectHighlightedtext(driver).click();
-	  //enter blank phone no
-	  FirstFormPOM.mobileno(driver).sendKeys(ip7);
-	  WebDriverWait wait = new WebDriverWait(driver,20);
-	  wait.until(ExpectedConditions.visibilityOf(FirstFormPOM.validphonereq(driver)));
-	  validationmsg = FirstFormPOM.validphonereq(driver).getText();
-	  if(validationmsg.equalsIgnoreCase(expected))
+  
+  /**************************************************************check confirm email and confirm password match with email and password
+ * @throws InterruptedException *******************/
+ 
+  
+  public String confirm_email_password_match(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String ip7,String vExpected) throws InterruptedException
+  {
+	 String validationmsg = null;
+	  if(!ip3.equalsIgnoreCase(ip4))
 	  {
-		  vTC_Res = "pass";
-		  vTS_Res = "pass";
+		 
+		//enter username
+		  FirstFormPOM.Firstname(driver).sendKeys(ip1);
+		  //enter lastname
+		  FirstFormPOM.Lastname(driver).sendKeys(ip2);
+		  //enter email
+		  FirstFormPOM.email(driver).sendKeys(ip3);
+		  //enter confirm email
+		  FirstFormPOM.confirmemail(driver).sendKeys(ip4);
+		//enter password
+		  FirstFormPOM.password(driver).sendKeys(ip5);
+		  //enter confirm password
+		  FirstFormPOM.confirmpassword(driver).sendKeys(ip6);
+		  //select india code
+		  FirstFormPOM.clickdialcode(driver).click();
+		  //enter india dial code
+		  FirstFormPOM.dialcodetextbox(driver).sendKeys("+91");
+		  Thread.sleep(1000);
+		  //select highlighted text
+		  //WebDriverWait wait  = new WebDriverWait(driver,10);
+		  //wait.until(ExpectedConditions.elementToBeClickable(FirstFormPOM.selectHighlightedtext(driver)));
+		  FirstFormPOM.selectHighlightedtext(driver).click();
+		  FirstFormPOM.mobileno(driver).sendKeys(ip7);
+		  //select i agree text box
+		  Thread.sleep(1000);
+		  WebElement checkbox = FirstFormPOM.Iagreecheckbox(driver).get(8);
+		  if(!checkbox.isSelected())
+		  {
+			  System.out.println("check box not selected");
+			  Actions act = new Actions(driver);
+			  act.moveToElement(checkbox).build().perform();
+			  checkbox.click();
+		  }
+		  FirstFormPOM.registerbtn(driver).click();
+		  //get the error text
+	      validationmsg = FirstFormPOM.confirmpassworddoesntmatch(driver).getText();
+		  if(validationmsg.equalsIgnoreCase(vExpected))
+		  {
+			  vTC_Res = "pass";
+			  vTS_Res = "pass";
+		  }
+		  else
+		  {
+			  vTC_Res = "fail";
+			  vTS_Res = "fail";
+		  }
+		  return validationmsg;
 	  }
-	  else {
-		vTC_Res = "fail";
-		vTS_Res = "fail";
-	}
-	  return validationmsg;	   
-
-}  
+	  else if(!ip5.equalsIgnoreCase(ip6))
+	  {
+		//enter username
+		  FirstFormPOM.Firstname(driver).sendKeys(ip1);
+		  //enter lastname
+		  FirstFormPOM.Lastname(driver).sendKeys(ip2);
+		  //enter email
+		  FirstFormPOM.email(driver).sendKeys(ip3);
+		  //enter confirm email
+		  FirstFormPOM.confirmemail(driver).sendKeys(ip4);
+		//enter password
+		  FirstFormPOM.password(driver).sendKeys(ip5);
+		  //enter confirm password
+		  FirstFormPOM.confirmpassword(driver).sendKeys(ip6);
+		  //select india code
+		  FirstFormPOM.clickdialcode(driver).click();
+		  //enter india dial code
+		  FirstFormPOM.dialcodetextbox(driver).sendKeys("+91");
+		  Thread.sleep(1000);
+		  //select highlighted text
+		  //WebDriverWait wait  = new WebDriverWait(driver,10);
+		  //wait.until(ExpectedConditions.elementToBeClickable(FirstFormPOM.selectHighlightedtext(driver)));
+		  FirstFormPOM.selectHighlightedtext(driver).click();
+		  FirstFormPOM.mobileno(driver).sendKeys(ip7);
+		  //select i agree text box
+		  Thread.sleep(1000);
+		  WebElement checkbox = FirstFormPOM.Iagreecheckbox(driver).get(8);
+		  if(!checkbox.isSelected())
+		  {
+			  System.out.println("check box not selected");
+			  Actions act = new Actions(driver);
+			  act.moveToElement(checkbox).build().perform();
+			  checkbox.click();
+		  }
+		  //click on register button
+		  FirstFormPOM.registerbtn(driver).click();
+		  //get the error message
+		  validationmsg = FirstFormPOM.passconfirmpassdontmatch(driver).getText();
+		  if(validationmsg.equalsIgnoreCase(vExpected))
+		  {
+			  vTC_Res = "pass";
+			  vTS_Res = "pass";
+		  }
+		  else
+		  {
+			  vTC_Res = "fail";
+			  vTS_Res = "fail";
+		  }
+		  return validationmsg;
+	  }
+	  else
+	  {
+		  return null;
+	  }
+  }
   
   public void closebrowser()
  	{
