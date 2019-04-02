@@ -2,20 +2,20 @@
 <testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="26014" started-at="2019-03-22T04:26:16Z" finished-at="2019-03-22T04:26:42Z">
+  <suite name="Default suite" duration-ms="15376" started-at="2019-04-02T04:43:29Z" finished-at="2019-04-02T04:43:44Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="26014" started-at="2019-03-22T04:26:16Z" finished-at="2019-03-22T04:26:42Z">
+    <test name="Default test" duration-ms="15376" started-at="2019-04-02T04:43:29Z" finished-at="2019-04-02T04:43:44Z">
       <class name="registrationtest.IndiRegFirstForm">
-        <test-method status="PASS" signature="init()[pri:0, instance:registrationtest.IndiRegFirstForm@5e3a8624]" name="init" is-config="true" duration-ms="844" started-at="2019-03-22T04:26:16Z" finished-at="2019-03-22T04:26:17Z">
+        <test-method status="PASS" signature="init()[pri:0, instance:registrationtest.IndiRegFirstForm@91161c7]" name="init" is-config="true" duration-ms="854" started-at="2019-04-02T04:43:29Z" finished-at="2019-04-02T04:43:30Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- init -->
-        <test-method status="PASS" signature="f()[pri:0, instance:registrationtest.IndiRegFirstForm@5e3a8624]" name="f" duration-ms="24239" started-at="2019-03-22T04:26:17Z" finished-at="2019-03-22T04:26:42Z">
+        <test-method status="PASS" signature="f()[pri:0, instance:registrationtest.IndiRegFirstForm@91161c7]" name="f" duration-ms="13456" started-at="2019-04-02T04:43:30Z" finished-at="2019-04-02T04:43:43Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- f -->
-        <test-method status="PASS" signature="teardown()[pri:0, instance:registrationtest.IndiRegFirstForm@5e3a8624]" name="teardown" is-config="true" duration-ms="908" started-at="2019-03-22T04:26:42Z" finished-at="2019-03-22T04:26:42Z">
+        <test-method status="PASS" signature="teardown()[pri:0, instance:registrationtest.IndiRegFirstForm@91161c7]" name="teardown" is-config="true" duration-ms="1042" started-at="2019-04-02T04:43:43Z" finished-at="2019-04-02T04:43:44Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- teardown -->

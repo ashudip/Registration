@@ -184,7 +184,7 @@ public class IndiRegFirstForm {
 	}
   	else if(KW.equalsIgnoreCase("Thankyoumsg"))
   	{
-  		String res = thankyou(expected);
+  		String res = thankyou(ip3,expected);
   		return res;
   	}
 	else if(KW.equalsIgnoreCase("TextAfterThankYou")) {
@@ -407,21 +407,28 @@ public String Enter_blankDetails(String ip1,String ip2,String ip3,String ip4,Str
   
   
   /*****************************************************************Thank you message after successfull registration************************************************************/
-   public String thankyou(String expected)
+   public String thankyou(String email,String expected)
   {
 	  String validationmsg;
-	  
+	  WebDriverWait wait = new WebDriverWait(driver,20);
+	  wait.until(ExpectedConditions.visibilityOf(ThankYou.thankyoumsg(driver)));
 	  validationmsg = ThankYou.thankyoumsg(driver).getText();
+	  System.out.println("validation message = "+validationmsg);
 	  if(validationmsg.equalsIgnoreCase(expected))
 	  {
 		  vTC_Res = "pass";
 		  vTS_Res = "pass";
+		//call the token 
+		  TokenValidation token = new TokenValidation();
+		  token.init(email);
 	  }
 	  else
 	  {
 		  vTC_Res = "fail";
 		  vTS_Res = "fail";
 	  }
+	  
+	  
 	  return validationmsg;
   }
 
@@ -444,6 +451,7 @@ public String Enter_blankDetails(String ip1,String ip2,String ip3,String ip4,Str
   }
   
   /*************************************************************** enter valid details function ********************************************************/
+    
     public void detailspresent(String ip1,String ip2,String ip3,String ip4,String ip5,String ip6,String ip7) throws InterruptedException
   {
       //enter username
@@ -478,7 +486,7 @@ public String Enter_blankDetails(String ip1,String ip2,String ip3,String ip4,Str
 		  act.moveToElement(checkbox).build().perform();
 		  checkbox.click();
 	  }
-	  FirstFormPOM.registerbtn(driver).click();
+	 // FirstFormPOM.registerbtn(driver).click();
 	   Thread.sleep(2000);
      
    }

@@ -12,7 +12,8 @@ public class ThankYou {
 	
 	public static WebElement thankyoumsg(WebDriver driver)
 	{
-		element = driver.findElement(By.xpath("//h6[@class='text-xs-center headlines-light p-t-2']"));
+		element = driver.findElement(By.xpath("//h6[contains(text(),'Thank You!')]"));
+		
 		return element;
 	}	 
 	//message after thank you message
