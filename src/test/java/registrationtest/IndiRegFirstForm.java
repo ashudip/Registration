@@ -23,7 +23,7 @@ import readwriteexcel.ReadExcel;
 import readwriteexcel.WriteExcel;
 
 public class IndiRegFirstForm {
-	//https://github.com/ashudip/Registration.git--------------> repository name
+	//https://Ashudeepdevari@bitbucket.org/CodeMax/qa_selenium_repo.git
 	
 	WebDriver driver;
     String xl_path,xl_tcRes,xl_TsRes;
